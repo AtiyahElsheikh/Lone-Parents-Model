@@ -16,6 +16,7 @@ import time
 import datetime
 import multiprocessing
 
+""" Return a dictionary of meta parameters """
 def meta_params():
     
     m = OrderedDict() # For meta-parameters file
@@ -28,28 +29,41 @@ def meta_params():
     m['statsCollectFrom'] = 1960
     m['policyStartYear'] = 2020
     m['outputYear'] = 2015
-    m['minStartAge'] = 24
-    m['maxStartAge'] = 45
+   
+    # a population of males to be randomly generated in the 
+    # range of minStartAge - maxStartAge
+    m['minStartAge'] = 24                  
+    m['maxStartAge'] = 45                  
+   
     m['verboseDebugging'] = False
-    m['singleRunGraphs'] = False
-    m['withBenefits'] = True
-    m['externalCare'] = True
+    m['singleRunGraphs'] = False                           # ?? 
+    m['withBenefits'] = True                               # ?? 
+    m['externalCare'] = True                               # ?? 
     m['careAllocationFromYear'] = m['startYear']
     m['favouriteSeed'] = int(time.time())
     m['loadFromFile'] = False
-    m['numberClasses'] = 5
+    m['numberClasses'] = 5                                 # ?? Socio-econimic classes
     m['numCareLevels'] = 5
-    m['timeDiscountingRate'] = 0.035
-        ## Description of the map, towns, and houses
+    m['timeDiscountingRate'] = 0.035                       # ??
+    
+    # Description of the map and towns: 
+    #   The space is represented by a 2-level grid.  At the higher level, 
+    #   an mapGridYDimension x mapGridXDimension grid roughly represents 
+    #   the UK map. Each cell in this high-level grid is composed by 
+    #   a townGridDimension-grid, which represents the space at the lower level.
     m['mapGridXDimension'] = 8
     m['mapGridYDimension'] = 12    
-    m['townGridDimension'] = 25
-    m['numHouseClasses'] = 3
+    m['townGridDimension'] = 5 * 5                          
+    
+    ## Description of houses 
+    m['numHouseClasses'] = 3                
     m['houseClasses'] = ['small','medium','large']
-    m['cdfHouseClasses'] = [ 0.6, 0.9, 5.0 ]
-    m['shareClasses'] = [0.2, 0.23, 0.25, 0.22, 0.1]
-    m['classAdjustmentBeta'] = 3.0
+    m['cdfHouseClasses'] = [ 0.6, 0.9, 5.0 ]               # comulative distribution function
+    m['shareClasses'] = [0.2, 0.23, 0.25, 0.22, 0.1]       # ?? Socio-economic classes?
+    m['classAdjustmentBeta'] = 3.0                         # ??
 
+    # Relative population density of UK.  A density of 1.0 corresponds to 
+    #   the cell with the highest density   
     m['ukMap'] = [0.0, 0.1, 0.2, 0.1, 0.0, 0.0, 0.0, 0.0,
                   0.1, 0.1, 0.2, 0.2, 0.3, 0.0, 0.0, 0.0,
                   0.0, 0.2, 0.2, 0.3, 0.0, 0.0, 0.0, 0.0,
@@ -61,8 +75,9 @@ def meta_params():
                   0.0, 0.0, 0.1, 0.2, 1.0, 0.6, 0.3, 0.4,
                   0.0, 0.0, 0.5, 0.7, 0.5, 1.0, 1.0, 0.0,
                   0.0, 0.0, 0.2, 0.4, 0.6, 1.0, 1.0, 0.0,
-                  0.0, 0.2, 0.3, 0.0, 0.0, 0.0, 0.0, 0.0]
+                  0.0, 0.2, 0.3, 0.0, 0.0, 0.0, 0.0, 0.0] 
 
+    # ?? looks like deviation from the average 
     m['ukClassBias'] = [0.0, -0.05, -0.05, -0.05, 0.0, 0.0, 0.0, 0.0,
                         -0.05, -0.05, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
                         0.0, -0.05, -0.05, 0.0, 0.0, 0.0, 0.0, 0.0,
@@ -74,8 +89,9 @@ def meta_params():
                         0.0, 0.0, -0.05, 0.0, -0.05, 0.0, 0.0, 0.0,
                         0.0, 0.0, 0.0, -0.05, 0.0, 0.2, 0.15, 0.0,
                         0.0, 0.0, 0.0, 0.0, 0.1, 0.2, 0.15, 0.0,
-                        0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0]
+                        0.0, 0.0, 0.1, 0.0, 0.0, 0.0, 0.0, 0.0] 
     
+    # ?? 
     m['lha_1'] = [0.0, 91.81, 91.81, 91.81, 0.0, 0.0, 0.0, 0.0,
                   91.81, 91.81, 91.81, 91.81, 97.81, 0.0, 0.0, 0.0,
                   0.0, 91.81, 91.81, 79.24, 0.0, 0.0, 0.0, 0.0,
@@ -128,8 +144,9 @@ def meta_params():
                   0.0, 0.0, 218.63, 200.09, 242.40, 429.53, 322.15, 0.0,
                   0.0, 185.29, 182.45, 0.0, 0.0, 0.0, 0.0, 0.0]
     
-    m['mapDensityModifier'] = 0.6
-    ## Graphical interface details
+    m['mapDensityModifier'] = 0.6                          # ??
+    
+    # Graphical interface details
     m['interactiveGraphics'] = False
     m['delayTime'] = 0.0
     m['screenWidth'] = 1300
@@ -143,6 +160,7 @@ def meta_params():
     m['popY'] = 50
     m['pixelsInPopPyramid'] = 2000
     m['careLevelColour'] = ['blue','green','yellow','orange','red']
+    # ?? number of colors = number of house classes x 2
     m['houseSizeColour'] = ['blue','green','yellow','orange','red', 'lightgrey']
     m['pixelsPerTown'] = 56
     m['maxTextUpdateList'] = 22
@@ -152,6 +170,7 @@ def meta_params():
     m['numberProcessors'] = 10
     m['debuggingMode'] = True
     
+    # Document all meta parameters in an (possibly existing) external file
     folder = 'defaultSimFolder'
     if not os.path.exists(folder):
         os.makedirs(folder)
@@ -172,36 +191,39 @@ def init_params():
     p = OrderedDict()
     
     # Public Finances Parameters
-    p['taxBrackets'] = [663, 228, 0]
-    p['taxationRates'] = [0.4, 0.2, 0.0]
+    p['taxBrackets'] = [663, 228, 0]             # ?? Normalized numbers?
+    p['taxationRates'] = [0.4, 0.2, 0.0]         # Standard taxation rates propertional to income
     
     p['statePension'] = 164.35
     p['minContributionPeriods'] = 35*12
     p['employeePensionContribution'] = 0.04
-    p['employerPensionContribution'] = 0.03
+    p['employerPensionContribution'] = 0.03     
     p['statePensionContribution'] = 0.01
     p['pensionReturnRate'] = 0.05/12.0
-    p['wealthToPoundReduction'] = 250.0
-    #### SES-version parameters   ######
+    p['wealthToPoundReduction'] = 250.0          # ?? 
     
-    p['maleMortalityBias'] = 0.8   ### SES death bias
+    # SES-version parameters
+    p['maleMortalityBias'] = 0.8                
     p['femaleMortalityBias'] = 0.85
-    p['careNeedBias'] = 0.9   ### Care Need Level death bias
-    p['unmetCareNeedBias'] = 0.5  ### Unmet Care Need death bias
+    p['careNeedBias'] = 0.9   
+    p['unmetCareNeedBias'] = 0.5  
+    p['fertilityBias'] = 0.9                
     
-    p['fertilityBias'] = 0.9  ### Fertility bias
-    
-    ####  Income-related parameters
-    p['workingAge'] = [16, 18, 20, 22, 24]
+    # Income-related parameters: 
+    # - WorkingAge: The ages of young agents deciding to start working
+    # - pensionWage: ?? 
+    p['workingAge'] = [16, 18, 20, 22, 24]      
     p['pensionWage'] = [5.0, 7.0, 10.0, 13.0, 18.0] # [0.64, 0.89, 1.27, 1.66, 2.29] #  
-    # Salry parameters
+    
+    # Salry parameters 
+    #   ?? vector parameters correspond to each SES level
     p['incomeInitialLevels'] = [5.0, 7.0, 9.0, 11.0, 14.0] #[0.64, 0.89, 1.15, 1.40, 1.78] #  
     p['incomeFinalLevels'] = [10.0, 15.0, 22.0, 33.0, 50.0] #[1.27, 1.91, 2.80, 4.21, 6.37] #  
     p['incomeGrowthRate'] = [0.4/12.0, 0.35/12.0, 0.35/12.0, 0.3/12.0, 0.25/12.0]
-    p['wageVar'] = 0.1
+    p['wageVar'] = 0.1                           
     p['workDiscountingTime'] = 1.0
     p['weeklyHours'] = [40.0, 20.0, 0.0, 0.0, 0.0] 
-    p['maternityLeaveDuration'] = 9
+    p['maternityLeaveDuration'] = 9              # Months 
     
     # Care transition params
     p['unmetNeedExponent'] = 1.0
@@ -209,14 +231,13 @@ def init_params():
     p['careTransitionRate'] = 0.7
     
     # Care params
-    p['priceSocialCare'] = 17.0 
+    p['priceSocialCare'] = 17.0                  # ?? Pounds / hour
     p['priceChildCare'] = 6.0
-    p['quantumCare'] = 4
-    
+    p['quantumCare'] = 4                         # Hours 
     
     # Child Care params
-    p['childCareDemand'] = 168 # 56 #48
-    p['maxFormalChildCare'] = 48
+    p['childCareDemand'] = 7*24 # 56 #48         # ?? Hours / Week
+    p['maxFormalChildCare'] = 48                 # Hours 
     p['ageTeenagers'] = 13
     p['zeroYearCare'] = 80.0 
     p['priorityAgeThreshold'] = 8
@@ -228,10 +249,13 @@ def init_params():
     p['incomeCareFactor'] = 0.2
     
     # Public Child Care Provision Parameters
-    # 1st policy parameter
+    ##############################################
+    # 1st policy: The alpha-policy targeting
+    #             Government contributes from 20% to 80% of the child care cost by
+    #             a working family up to 2000 pounds per child per year 
     p['childCareTaxFreeRate'] = 0.2
-    ###########################################
-    p['maxPublicContribution'] = 2000.0
+    p['maxPublicContribution'] = 2000.0         
+    # ??  Which policy 
     p['childcareTaxFreeCap'] = int((p['maxPublicContribution']/52.0)/(p['priceChildCare']*p['childCareTaxFreeRate']))
     p['maxHouseholdIncomeChildCareSupport'] = 300.0
     
@@ -241,38 +265,53 @@ def init_params():
     
     p['nurseriesOpeningTimes'] = [8, 18]
     ##############################################
+    # 2nd policy: The beta policy targeting
+    #             increasing the the number of free child care from 20 to 32 hours/ week 
+    #             or 1040 hours / years for every child aged 3 or 4
     p['freeChildCareHoursSchool'] = 32
-    
+    # ?? 
     p['publicChildCare'] = [[1]*10+[0]*14, [1]*10+[0]*14, [1]*10+[0]*14, [1]*10+[0]*14, [1]*10+[0]*14, [0]*24, [0]*24]
     
     # Public Social Care Provision Parameters
     p['taxBreakRate'] = 0.0
     
-    # 4th policy parameter
+    ##############################################
+    # 4th policy: The theta-policy
+    #             A new scheme to make the goverment contribute to the cost of 
+    #             of social care by 50% (currently no such scheme exists)
     p['socialCareTaxFreeRate'] = 0.0
+
     ##########################################
-    # 3rd policy parameter
+    # 3rd policy: The gamma policy
+    #             Glocal authorities pay the full social care cost of people with 
+    #             a critical level of social care need (care need level 4) 
+    #             with savings of less than £14,250.  If their savings are between this lower bound 
+    #             and £23,250, the person receiving the social care will contribute 
+    #             a pound for every £250 of savings to the weekly cost.
     p['publicCareNeedLevel'] = 3 # 5
     #############################################
     
     p['publicCareAgeLimit'] = 0 # 1000
     p['minWealthMeansTest'] = 14250.0
     p['maxWealthMeansTest'] = 23250.0
-    p['partialContributionRate'] = 0.5
-    p['minimumIncomeGuarantee'] = 189.0
+    p['partialContributionRate'] = 0.5           # ??
+    p['minimumIncomeGuarantee'] = 189.0          # ?? unit?
     
-    p['distanceExp'] = 0.5
-    p['networkExp'] = 0.4
+    p['distanceExp'] = 0.5                       # ?? 
+    p['networkExp'] = 0.4                        # ??
     
+    # ?? 
     p['incomeCareParam'] = 0.00005 # 0.0001
     p['wealthCareParam'] = 0.0000004 # 0.00000005
     
+    # ?? 
     p['betaInformalCare'] = 1.2
     p['betaFormalCare'] = 1.0
     p['shareFinancialWealth'] = 0.3
     p['formalCareDiscountFactor'] = 0.5
     
     # Social Transition params
+    # ?? Units?
     p['educationCosts'] = [0.0, 100.0, 150.0, 200.0] #[0.0, 12.74, 19.12, 25.49] # 
     p['eduWageSensitivity'] = 0.4 # 0.2
     p['eduRankSensitivity'] = 4.0 # 3.0
@@ -283,7 +322,6 @@ def init_params():
     p['incomeBeta'] = 0.01
     p['careBeta'] = 0.01
     p['probIncomeCare'] = 0.002
-    
     
     
 #    p['retiredSupply_C'] = [24.0, 12.0, 6.0, 2.0] # [56.0, 28.0, 16.0, 8.0]
@@ -299,6 +337,7 @@ def init_params():
 #    p['studentSupply_S'] = [[4.0, 2.0, 0.0, 0.0], [6.0, 4.0, 2.0, 0.0]] # [16.0, 8.0, 4.0, 0.0]
     
     # Max daily supplies by distance and weekdays/weekend
+    # ?? Units
     p['dailyRetiredSupply'] = [12, 12] # [56.0, 28.0, 16.0, 8.0]
     p['dailyUnemployedSupply'] = [12, 12]
     p['dailyEmployedSupply'] = [6, 12] # [16.0, 12.0, 8.0, 4.0]
@@ -324,12 +363,12 @@ def init_params():
     p['hospitalizationParam'] = 0.5
     p['needLevelParam'] = 2.0
     p['unmetSocialCareParam'] = 2.0
-    p['costHospitalizationPerDay'] = 400
+    p['costHospitalizationPerDay'] = 400         # ?? Unit? 
     
     # Priced growth  #####
     p['wageGrowthRate'] = 1.0 # 1.01338 # 
 
-    ## Mortality statistics
+    # Mortality statistics
     p['baseDieProb'] = 0.0001
     p['babyDieProb'] = 0.005
     p['maleAgeScaling'] = 14.0
@@ -338,7 +377,7 @@ def init_params():
     p['femaleAgeDieProb'] = 0.00019
     p['num5YearAgeClasses'] = 28
 
-    ## Transitions to care statistics
+    # Transitions to care statistics
     p['baseCareProb'] = 0.0002
     p['personCareProb'] = 0.0008
     ##p['maleAgeCareProb'] = 0.0008
@@ -347,6 +386,7 @@ def init_params():
     p['femaleAgeCareScaling'] = 19.0
     p['cdfCareTransition'] = [ 0.7, 0.9, 0.95, 1.0 ]
     p['careLevelNames'] = ['none','low','moderate','substantial', 'critical']
+    # ?? / Week? 
     p['careDemandInHours'] = [ 0.0, 14.0, 28.0, 56.0, 84.0] # [ 0.0, 8.0, 16.0, 30.0, 80.0 ] #[ 0.0, 12.0, 24.0, 48.0, 96.0 ]
     p['probFlexibleNeed'] = 0.5
     
@@ -355,22 +395,22 @@ def init_params():
     p['activitiesHours'] = [[8, 9], [12, 13], [18, 19], [21, 22]]
     p['nightSupervisionHours'] = [23, 24, 1, 2, 3, 4, 5, 6]
     
-    ## Cost of care for tax burden
-    p['hourlyCostOfCare'] = 20.0
+    # Cost of care for tax burden
+    p['hourlyCostOfCare'] = 20.0                 # ?? Pounds? 
 
-    ## Fertility statistics
+    # Fertility statistics
     p['growingPopBirthProb'] = 0.215
     p['steadyPopBirthProb'] = 0.13
     p['transitionYear'] = 1965
     p['minPregnancyAge'] = 17
     p['maxPregnancyAge'] = 42
 
-    ## Class and employment statistics
+    # Class and employment statistics
     p['numOccupationClasses'] = 3
     p['occupationClasses'] = ['lower','intermediate','higher']
     p['cdfOccupationClasses'] = [ 0.6, 0.9, 1.0 ]
 
-    ## Age transition statistics
+    # Age transition statistics
     p['ageOfAdulthood'] = 16
     p['ageOfRetirement'] = 65
     p['probOutOfTownStudent'] = 0.5
@@ -388,6 +428,7 @@ def init_params():
     p['shiftDuration'] = 8
     
     # Poverty Line income parameters
+    # ?? Units? 
     p['singleWorker'] = 250.0
     p['marriedCouple'] = 400.0
     p['singlePensioner'] = 190.0
@@ -397,7 +438,7 @@ def init_params():
     
 #    p['shiftsWeights'] = [51.0, 51.34, 48.23, 43.29, 37.72, 33.61, 28.42, 22.47, 16.65, 11.64, 8.52, 6.77, 
 #                         5.5, 4.66, 4.18, 4.66, 6.86, 11.58, 17.81, 24.5, 31.34, 36.29, 41.96, 47.43]
-#    
+#   ?? 
     p['shiftsWeights'] = [51.80, 66.10, 70.10, 71.40, 54.10, 63.40, 68.60, 65.00, 54.70, 35.00, 20.70, 15.70,
                          13.00, 11.50, 9.10, 6.80, 4.60, 3.80, 3.20, 3.00, 4.60, 6.70, 13.90, 28.80]
 
@@ -431,7 +472,10 @@ def init_params():
     
     #### UC benefits
     #  Standard allowance
-    p['sigleBelow25'] = (257.33*12)/52.0
+    # ?? 
+    # Below is a typing error which can easily leads to non-easy-to-catch mistakes  
+    # It is therefore recommended to rather use set & get with dictionaries 
+    p['sigleBelow25'] = (257.33*12)/52.0         
     p['single25Plus'] = (324.84*12)/52.0
     p['coupleBelow25'] = ((403.93*12)/52.0)/2.0
     p['couple25Plus'] = ((509.91*12)/52.0)/2.0
@@ -751,7 +795,16 @@ if __name__ == "__main__":
     if not os.path.exists(folder):
         os.makedirs(folder)
     
-    # Create or update file for graphs
+    
+    # Create or update file for graphs 
+    # graphs correspond to a history of conducted simulation runs with the
+    # following parameters recorded
+    # - simFolder:  Simulation folder where simulation data is stored 
+    # - doGrapphs:  ?? 
+    # - numRepeats: number of repetivie simulations 
+    #             (probably with different seed values?)
+    # numScenarios: ??
+    # numPolcies: number of active policies being invistigated 
     if not os.path.isfile('./graphsParams.csv'):
         with open("graphsParams.csv", "w") as file:
             writer = csv.writer(file, delimiter = ",", lineterminator='\r')
@@ -759,6 +812,7 @@ if __name__ == "__main__":
     else:
         graphsDummy = pd.read_csv('graphsParams.csv', sep=',', header=0)
         numberRows = graphsDummy.shape[0]
+        # ?? 
         for i in range(numberRows):
             graphsDummy['doGraphs'][i] = 0
         graphsDummy.to_csv("graphsParams.csv", index=False)
