@@ -34,13 +34,18 @@ import pdb
 # from PIL import Image
 
 
-
+"""
+?? 
+Class Sim: A class for recording the outputs of interest as the simulation proceed
+"""
 class Sim:
     """Instantiates a single run of the simulation."""    
     def __init__ (self, scenario, params, folder):
         
         self.p = OrderedDict(params)
         
+        # ?? Would be good to have a brief description to unclear data fields and their purposes
+        #    or a cross reference to the paper / model document 
         self.dataMap = ['town_x', 'town_y', 'x', 'y', 'size', 'unmetNeed'] 
         
         self.dataPyramid = ['year', 'Class Age 0', 'Class Age 1', 'Class Age 2', 'Class Age 3', 'Class Age 4', 'Class Age 5', 'Class Age 6', 'Class Age 7',
@@ -190,12 +195,17 @@ class Sim:
         #                        background=self.p['bgColour'])
 
 
+    """ Return ?? 
+    
+    Run the simulation from year start to year end.
+    """
     def run(self, policy, policyParams, seed):
-        """Run the simulation from year start to year end."""
 
         #pprint.pprint(self.p)
         #raw_input("Happy with these parameters?  Press enter to run.")
         self.randSeed = seed
+        
+        ## ?? Why calling seed function twice? 
         random.seed(self.randSeed)
         np.random.seed(self.randSeed)
 
@@ -370,13 +380,14 @@ class Sim:
 
         return self.totalTaxBurden[-1]
 
-
+    """ 
+    Set up the initial population and the map.
+    We may want to do this from scratch, and we may want to do it
+    by loading data / information from a pre-generated file.
+    """
     def initializePop(self):
-        """
-        Set up the initial population and the map.
-        We may want to do this from scratch, and we may want to do it
-        by loading things from a pre-generated file.
-        """
+        # ?? Brief descriptions of the numbers within the text file needed (not necessarily understandable in their pure format)
+
         #reading JH's fertility projections from a CSV into a numpy array
         self.fert_data = np.genfromtxt('babyrate.txt.csv', skip_header=0, delimiter=',')
 
@@ -479,7 +490,14 @@ class Sim:
         # Assign wealth
         self.updateWealth()
     
+
+    """ ?? What does this function return? 
+    
+    ?? Brief description needed 
+    """
     def createShifts(self):
+
+        ## ?? A nroef comment for local variables & before each algorithmic step 
         allShifts = []
         numShifts = [int(round(x)) for x in self.p['shiftsWeights']]
         hours = []
@@ -780,7 +798,7 @@ class Sim:
             
         endYear = time.time()
         
-        print 'Year execution time: ' + str(endYear - startYear)
+        print 'Year execution time: ' + str(endYear - startYear)     # ?? Looks rather like month execution time?
 
             
         # print 'Did doStats'
@@ -1007,6 +1025,10 @@ class Sim:
         
         return deathProb
     
+    """ ?? Describe which fields is going to change
+
+    ... 
+    """
     def doDeaths(self, policyFolder, month):
         
         preDeath = len(self.pop.livingPeople)
@@ -2049,7 +2071,7 @@ class Sim:
                                     needSlot = CareSlot(house, i, -1, False, careWeight, probIndex, cost, [person], slotSuppliers)
                                     house.careSlots.append(needSlot)
                 
-                    houseSlotsIds = [x.id for x in house.careSlots]
+                    houseSlotsIds = [x.id for x in house.careSlots]             # ?? Exception attribute error raised
                     prioritySlotsIds = [x.id for x in house.priorityCareSlots]
                     for slotid in prioritySlotsIds:
                         if slotid not in houseSlotsIds:
@@ -9240,7 +9262,12 @@ class Sim:
         notEarningPop = [x for x in self.pop.livingPeople if x.cumulativeIncome > 0 and x.wage == 0]
         for person in notEarningPop:
             person.financialWealth *= (1.0 + self.p['pensionReturnRate'])
-            
+
+
+    """ Return ??
+    
+    ?? Assign wealth magnitude to all households (i.e. occupied houses) 
+    """        
     def updateWealth(self):
         households = [x for x in self.map.occupiedHouses]
         for h in households:

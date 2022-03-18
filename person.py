@@ -4,9 +4,17 @@ import numpy as np
 import math
 import networkx as nx
 
+"""
+The person class stores information about a person in the simulation 
+?? Brief description of unclear fields (inside the code) 
+"""
 class Person:
-    """The person class stores information about a person in the sim."""
-    counter = 1
+    counter = 1                                  # a person ID within the popilation 
+
+    """ Constructor
+    
+    ?? Brief description of unclear arguments 
+    """
     def __init__ (self, mother, father, birthYear, age, sex, house, sec, cr, pcr, wage, inc, wlt, iw, fw, we, status, independence, tenure, month):
         self.mother = mother
         self.motherID = -1 # For pickle
@@ -158,8 +166,15 @@ class Person:
         self.id = Person.counter
         Person.counter += 1
 
+"""
+The population class stores a collection of persons.
+"""
 class Population:
-    """The population class stores a collection of persons."""
+    
+    """ Constructor 
+
+    ?? Brief description of unclear arguments 
+    """
     def __init__ (self, initial, startYear, minStartAge, maxStartAge,
                   workingAge, incomeInitialLevels, incomeFinalLevels,
                   incomeGrowthRate, workDiscountingTime, wageVar, weeklyHours):

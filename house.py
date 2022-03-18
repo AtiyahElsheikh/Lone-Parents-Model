@@ -3,9 +3,12 @@ import random
 import numpy as np
 import networkx as nx
 
+"""
+The house class stores information about a distinct house in the sim.
+"""
 class House:
     counter = 1
-    """The house class stores information about a distinct house in the sim."""
+    
     def __init__ (self, town, cdfHouseClasses, classBias, hx, hy):
         r = random.random()
         i = 0
@@ -169,10 +172,13 @@ class House:
         self.gettingBenefits = False
         
         House.counter += 1
-                            
+
+"""
+Town class describing a collection of houses.
+"""                            
 class Town:
     counter = 1
-    """Contains a collection of houses."""
+
     def __init__ (self, townGridDimension, tx, ty,
                   cdfHouseClasses, density, classBias, densityModifier,
                   lha1, lha2, lha3, lha4):
@@ -192,8 +198,11 @@ class Town:
                                          classBias,hx,hy)
                         self.houses.append(newHouse)
 
+"""
+Contains a collection of towns to make up the whole country being simulated.
+?? Brief description of some fields 
+"""
 class Map:
-    """Contains a collection of towns to make up the whole country being simulated."""
     def __init__ (self, gridXDimension, gridYDimension,
                   townGridDimension, cdfHouseClasses,
                   ukMap, ukClassBias, densityModifier,
