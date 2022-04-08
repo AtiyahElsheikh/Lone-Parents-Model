@@ -79,10 +79,10 @@ class Sim:
                         'q4_socialCareNeed', 'q4_informalSocialCare', 'q4_formalSocialCare', 'q4_unmetSocialCareNeed', 'q4_outOfWorkSocialCare',
                         'q5_socialCareNeed', 'q5_informalSocialCare', 'q5_formalSocialCare', 'q5_unmetSocialCareNeed', 'q5_outOfWorkSocialCare',
                         'grossDomesticProduct', 'publicCareToGDP', 'onhUnmetChildcareNeed', 'medianChildCareNeedONH',
-                        'totalHoursOffWork', 'origIQ1', 'origIQ2', 'origIQ3', 'origIQ4', 'origIQ5', 'dispIQ1', 'dispIQ2', 'dispIQ3', 
-                        'dispIQ4', 'dispIQ5', 'netIQ1', 'netIQ2', 'netIQ3', 'netIQ4', 'etIQ5', 'shareSES_1', 'shareSES_2', 'shareSES_3',
-                        'shareSES_4', 'shareSES_5', 'internalChildCare', 'internalSocialCare', 'externalChildCare', 'externalSocialCare', 
-                        'shareInternalCare', 'aggregateChildBenefits', 'aggregateDisabledChildrenBenefits', 'aggregatePIP', 
+                        'totalHoursOffWork', 'indIQ1', 'indIQ2', 'indIQ3', 'indIQ4', 'indIQ5', 'origIQ1', 'origIQ2', 'origIQ3', 'origIQ4', 'origIQ5', 
+                        'dispIQ1', 'dispIQ2', 'dispIQ3', 'dispIQ4', 'dispIQ5', 'netIQ1', 'netIQ2', 'netIQ3', 'netIQ4', 'etIQ5', 'shareSES_1', 
+                        'shareSES_2', 'shareSES_3', 'shareSES_4', 'shareSES_5', 'internalChildCare', 'internalSocialCare', 'externalChildCare', 
+                        'externalSocialCare', 'shareInternalCare', 'aggregateChildBenefits', 'aggregateDisabledChildrenBenefits', 'aggregatePIP', 
                         'aggregateAttendanceAllowance', 'aggregateCarersAllowance', 'aggregateUC', 'aggregateHousingElement', 
                         'aggregatePensionCredit', 'totalBenefits', 'benefitsIncomeShare']
         
@@ -356,7 +356,7 @@ class Sim:
                         self.outputData = pd.read_csv(self.folder + '/Policy_0/tempOutputs.csv')
                         self.outputData.to_csv(policyFolder + '/Outputs.csv', index=False)
           
-                self.doOneMonth(policyFolder, dataMapFolder, dataHouseholdFolder, self.year, self.month)
+                self.doOneMonth(policyFolder, dataMapFolder, dataHouseholdFolder, self.year, month, self.period)
                 
     #            self.from_Agents_to_IDs()
     #            pickle.dump(self.pop, open('Canvas_Pop/save.p_'+str(self.year), 'wb'))
@@ -617,7 +617,7 @@ class Sim:
                 person.house.occupants.append(person)
     
 
-    def doOneMonth(self, policyFolder, dataMapFolder, dataHouseholdFolder, year, month):
+    def doOneMonth(self, policyFolder, dataMapFolder, dataHouseholdFolder, year, month, period):
         """Run one year of simulated time."""
 
         ##print "Sim Year: ", self.year, "OH count:", len(self.map.occupiedHouses), "H count:", len(self.map.allHouses)
@@ -674,7 +674,7 @@ class Sim:
         # Here, people change job, find a job if unemployed and lose a job if employed.
         # The historical UK unemployment rate is the input.
         # Unmeployement rates are adjusted for age and SES.
-        # Upon losing the job, a new unemplyed agent is assigned an 'unemployment duration' draw from the emirical distribution.
+        # Upon losing the job, a new unemplyed agent is assigned an 'unemployment duration' draw from the empirical distribution.
         # Unemployment duration is also age and SES specific.
         
         self.computeAggregateSchedule()
@@ -789,9 +789,7 @@ class Sim:
         
         self.healthCareCost()
         
-        # print 'Doing fucntion 19...'
-        
-        self.doStats(policyFolder, dataMapFolder, dataHouseholdFolder)
+        self.doStats(policyFolder, dataMapFolder, dataHouseholdFolder, period)
         
         if (self.p['interactiveGraphics']):
             self.updateCanvas()
@@ -1388,7 +1386,6 @@ class Sim:
         self.householdCareNetwork()
         
         self.updateNetworkSupplies()
-        
         
         self.computeNetCareDemand()
         
@@ -8561,8 +8558,6 @@ class Sim:
         origIQ5 = np.median([x.yearlyIncome for x in independentAgents if x.incomeQuintile == 4])
         print 'Gross incomes quintiles: ' + str([origIQ1, origIQ2, origIQ3, origIQ4, origIQ5])
         
-        
-        
         dispIQ1 = np.median([x.yearlyDisposableIncome for x in independentAgents if x.disposableIncomeQuintile == 0])
         dispIQ2 = np.median([x.yearlyDisposableIncome for x in independentAgents if x.disposableIncomeQuintile == 1])
         dispIQ3 = np.median([x.yearlyDisposableIncome for x in independentAgents if x.disposableIncomeQuintile == 2])
@@ -10128,7 +10123,7 @@ class Sim:
             self.nextDisplayHouse = newHouse
                 
 
-    def doStats(self, policyFolder, dataMapFolder, dataHouseholdFolder):
+    def doStats(self, policyFolder, dataMapFolder, dataHouseholdFolder, period):
         """Calculate annual stats and store them appropriately."""
 
         self.times.append(self.year)
@@ -10484,6 +10479,13 @@ class Sim:
         dispIQ4 = np.median([x.householdDisposableIncome for x in self.map.occupiedHouses if x.disposableIncomeQuintile == 3])
         dispIQ5 = np.median([x.householdDisposableIncome for x in self.map.occupiedHouses if x.disposableIncomeQuintile == 4])
         
+        independentAgents = [x for x in self.pop.livingPeople if x.independentStatus == True]
+        indIQ1 = np.median([x.yearlyDisposableIncome for x in independentAgents if x.disposableIncomeQuintile == 0])
+        indIQ2 = np.median([x.yearlyDisposableIncome for x in independentAgents if x.disposableIncomeQuintile == 1])
+        indIQ3 = np.median([x.yearlyDisposableIncome for x in independentAgents if x.disposableIncomeQuintile == 2])
+        indIQ4 = np.median([x.yearlyDisposableIncome for x in independentAgents if x.disposableIncomeQuintile == 3])
+        indIQ5 = np.median([x.yearlyDisposableIncome for x in independentAgents if x.disposableIncomeQuintile == 4])
+        
         netIQ1 = np.median([x.householdNetIncome for x in self.map.occupiedHouses if x.netIncomeQuintile == 0])
         netIQ2 = np.median([x.householdNetIncome for x in self.map.occupiedHouses if x.netIncomeQuintile == 1])
         netIQ3 = np.median([x.householdNetIncome for x in self.map.occupiedHouses if x.netIncomeQuintile == 2])
@@ -10520,7 +10522,7 @@ class Sim:
             benefitsIncomeShare = totalBenefits/totalDisposableIncome
         print 'Benefits as share of income: ' + str(benefitsIncomeShare)
         
-        outputs = [self.year, self.month, self.period, currentPop, everLivedPop, numHouseholds, averageHouseholdSize, self.marriageTally, 
+        outputs = [self.year, self.month, period, currentPop, everLivedPop, numHouseholds, averageHouseholdSize, self.marriageTally, 
                    marriagePropNow, self.divorceTally, shareSingleParents, shareFemaleSingleParent, taxPayers, taxBurden, familyCareRatio, 
                    shareEmployed, shareWorkHours, self.publicSocialCare, self.costPublicSocialCare, self.sharePublicSocialCare, 
                    self.costTaxFreeSocialCare, self.publicChildCare, self.costPublicChildCare, self.sharePublicChildCare, 
@@ -10538,7 +10540,7 @@ class Sim:
                    q4_socialCareNeed, q4_informalSocialCare, q4_formalSocialCare, q4_unmetSocialCareNeed, q4_outOfWorkSocialCare,
                    q5_socialCareNeed, q5_informalSocialCare, q5_formalSocialCare, q5_unmetSocialCareNeed, q5_outOfWorkSocialCare,
                    self.grossDomesticProduct, publicCareToGDP, self.onhUnmetChildcareNeed, self.medianChildCareNeedONH, self.totalHoursOffWork,
-                   origIQ1, origIQ2, origIQ3, origIQ4, origIQ5, dispIQ1, dispIQ2, dispIQ3, dispIQ4, dispIQ5,
+                   indIQ1, indIQ2, indIQ3, indIQ4, indIQ5, origIQ1, origIQ2, origIQ3, origIQ4, origIQ5, dispIQ1, dispIQ2, dispIQ3, dispIQ4, dispIQ5,
                    netIQ1, netIQ2, netIQ3, netIQ4, netIQ5, self.socialClassShares[0], self.socialClassShares[1], self.socialClassShares[2],
                    self.socialClassShares[3], self.socialClassShares[4], self.internalChildCare, self.internalSocialCare, self.externalChildCare, 
                    self.externalSocialCare, shareInternalCare, self.aggregateChildBenefits, self.aggregateDisabledChildrenBenefits,
@@ -10608,7 +10610,7 @@ class Sim:
             writer = csv.writer(file, delimiter = ",", lineterminator='\r')
             writer.writerow(houseData)
             
-        if self.year == self.p['startYear']:
+        if period == 1:
             if not os.path.exists(policyFolder):
                 os.makedirs(policyFolder)
             with open(os.path.join(policyFolder, "Outputs.csv"), "w") as file:
